@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>נגן טיקטוק</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+  :root{
+    --bg: #0a0c10;
+    --bg-2: #12151b;
+    --cyan: #25f4ee;
+    --pink: #fe2c55;
+    --ink: #f4f6f7;
+    --ink-dim: #8b93a1;
+    --line: #23272f;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin:0;
+    padding:0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Rubik', sans-serif;
+    min-height: 100vh;
+  }
+
+  body{
+    display:flex;
+    justify-content:center;
+    padding: 40px 20px 60px;
+    background:
+      radial-gradient(600px 300px at 20% 0%, rgba(37,244,238,0.10), transparent 60%),
+      radial-gradient(600px 320px at 85% 15%, rgba(254,44,85,0.10), transparent 60%),
+      var(--bg);
+  }
+
+  .wrap{
+    width: 100%;
+    max-width: 420px;
+  }
+
+  header{
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-dim);
+    letter-spacing: 0.02em;
+  }
+
+  .kicker .dot{
+    width:7px; height:7px; border-radius:50%;
+    background: linear-gradient(135deg, var(--cyan), var(--pink));
+  }
+
+  h1{
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin: 10px 0 8px;
+    background: linear-gradient(90deg, var(--ink) 40%, var(--cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  p.lede{
+    color: var(--ink-dim);
+    font-size: 14.5px;
+    line-height: 1.6;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  form{
+    margin: 26px 0 22px;
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .field{
+    position: relative;
+    display:flex;
+    align-items:center;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+
+  .field:focus-within{
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 3px rgba(37,244,238,0.12);
+  }
+
+  .field input{
+    flex:1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--ink);
+    font-family: 'Space Mono', monospace;
+    font-size: 13.5px;
+    padding: 14px 16px;
+    direction: ltr;
+    text-align: right;
+  }
+
+  .field input::placeholder{
+    color: #4d5560;
+    font-family: 'Rubik', sans-serif;
+  }
+
+  button.go{
+    border: none;
+    border-radius: 12px;
+    padding: 13px 18px;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: #061013;
+    background: linear-gradient(90deg, var(--cyan), #7ef7f3);
+    cursor: pointer;
+    transition: transform .12s ease, filter .12s ease;
+  }
+
+  button.go:hover{ filter: brightness(1.05); }
+  button.go:active{ transform: scale(0.98); }
+
+  button.go:disabled{
+    opacity: 0.55;
+    cursor: default;
+    transform:none;
+  }
+
+  .hint{
+    font-size: 12px;
+    color: var(--ink-dim);
+    text-align: center;
+    margin: -6px 0 4px;
+  }
+
+  /* Frame — sized to TikTok's own native embed dimensions so the video
+     never gets cropped or force-scaled into a shape it wasn't made for */
+  .phone{
+    margin: 0 auto;
+    width: 325px;
+    max-width: 100%;
+    background: #000;
+    border-radius: 20px;
+    padding: 8px;
+    border: 1px solid #24272d;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.03) inset,
+      0 30px 60px -20px rgba(0,0,0,0.7);
+    position: relative;
+  }
+
+  .screen{
+    width: 100%;
+    height: 738px;
+    max-height: 80vh;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #0e1013;
+    position: relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .screen iframe{
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  .screen-state{
+    text-align:center;
+    padding: 24px;
+    color: var(--ink-dim);
+  }
+
+  .screen-state .icon{
+    font-size: 30px;
+    margin-bottom: 12px;
+    display:block;
+  }
+
+  .screen-state .msg{
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .screen-state.error .msg{
+    color: #ff9aa8;
+  }
+
+  .pulse{
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    border: 3px solid #23272f;
+    border-top-color: var(--cyan);
+    animation: spin 0.85s linear infinite;
+    margin: 0 auto 14px;
+  }
+
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+
+  footer{
+    text-align:center;
+    margin-top: 26px;
+    font-size: 12px;
+    color: #545c68;
+    line-height: 1.7;
+  }
+
+  footer a{ color: var(--ink-dim); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <span class="kicker"><span class="dot"></span>נגן חיצוני לטיקטוק</span>
+    <h1>הדביקו קישור, קבלו סרטון</h1>
+    <p class="lede">אם קישור טיקטוק לא נפתח לכם בלי האפליקציה — תדביקו אותו כאן והוא יתנגן ישר בדף, בלי הפניה לחנות האפליקציות.</p>
+  </header>
+
+  <form id="linkForm">
+    <div class="field">
+      <input
+        id="urlInput"
+        type="text"
+        inputmode="url"
+        placeholder="https://www.tiktok.com/@user/video/…"
+        autocomplete="off"
+      />
+    </div>
+    <button class="go" id="goBtn" type="submit">הצג את הסרטון</button>
+  </form>
+  <p class="hint">עובד גם עם קישורים מקוצרים כמו vm.tiktok.com</p>
+
+  <div class="phone">
+    <div class="screen" id="screen">
+      <div class="screen-state" id="emptyState">
+        <span class="icon">🎬</span>
+        <div class="msg">הסרטון יופיע כאן</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    הסרטון נטען ישירות מהשרתים של טיקטוק דרך מנגנון ההטמעה הרשמי שלהם.
+  </footer>
+</div>
+
+<script>
+  const form = document.getElementById('linkForm');
+  const input = document.getElementById('urlInput');
+  const btn = document.getElementById('goBtn');
+  const screen = document.getElementById('screen');
+
+  function setLoading(){
+    screen.innerHTML = `
+      <div class="screen-state" id="loadingState">
+        <div class="pulse"></div>
+        <div class="msg">טוען את הסרטון…</div>
+      </div>`;
+  }
+
+  function setError(text){
+    screen.innerHTML = `
+      <div class="screen-state error">
+        <span class="icon">⚠️</span>
+        <div class="msg">${text}</div>
+      </div>`;
+  }
+
+  function setVideo(id){
+    screen.innerHTML = `<iframe
+      src="https://www.tiktok.com/embed/v2/${id}"
+      allow="autoplay; encrypted-media; picture-in-picture"
+      allowfullscreen
+      referrerpolicy="no-referrer-when-downgrade"
+    ></iframe>`;
+  }
+
+  function extractIdFromUrl(url){
+    // matches /video/1234567890123456789
+    const match = url.match(/\/video\/(\d+)/);
+    return match ? match[1] : null;
+  }
+
+  async function resolveViaOEmbed(url){
+    const endpoint = 'https://www.tiktok.com/oembed?url=' + encodeURIComponent(url);
+    const res = await fetch(endpoint);
+    if (!res.ok) throw new Error('oembed-failed');
+    const data = await res.json();
+    if (data.embed_product_id) return data.embed_product_id;
+    if (data.html){
+      const m = data.html.match(/data-video-id="(\d+)"/);
+      if (m) return m[1];
+    }
+    throw new Error('no-id-in-oembed');
+  }
+
+  async function handleSubmit(e){
+    e.preventDefault();
+    const raw = input.value.trim();
+    if (!raw){
+      setError('צריך להדביק קישור קודם.');
+      return;
+    }
+
+    let url = raw;
+    if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+
+    if (!/tiktok\.com/i.test(url)){
+      setError('זה לא נראה כמו קישור של טיקטוק. ודאו שהעתקתם את הקישור המלא.');
+      return;
+    }
+
+    btn.disabled = true;
+    setLoading();
+
+    try {
+      // direct ID in the URL itself (fast path, no network needed)
+      let id = extractIdFromUrl(url);
+
+      // otherwise ask TikTok's own oEmbed service to resolve it
+      // (also handles shortened vm.tiktok.com / vt.tiktok.com links)
+      if (!id){
+        id = await resolveViaOEmbed(url);
+      }
+
+      setVideo(id);
+    } catch (err){
+      setError('לא הצלחנו לטעון את הסרטון הזה. נסו להדביק את הקישור המלא מהדפדפן (לא מקוצר), או בדקו שהסרטון עדיין קיים.');
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  form.addEventListener('submit', handleSubmit);
+</script>
+
+</body>
+</html>
