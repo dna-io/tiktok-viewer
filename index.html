@@ -3,39 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0c10">
 <title>נגן טיקטוק</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&family=Heebo:wght@400;500;600&display=swap');
 
   :root{
+    color-scheme: dark;
     --bg: #0a0c10;
-    --bg-2: #12151b;
+    --panel: #14171d;
     --cyan: #25f4ee;
     --pink: #fe2c55;
     --ink: #f4f6f7;
-    --ink-dim: #8b93a1;
-    --line: #23272f;
+    --ink-dim: #9aa1ab;
+    --line: #262a32;
   }
 
   *{ box-sizing: border-box; }
 
-  html, body{
+  html{
+    background: var(--bg);
+    color-scheme: dark;
+  }
+
+  body{
     margin:0;
     padding:0;
     background: var(--bg);
     color: var(--ink);
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Rubik', 'Heebo', sans-serif;
     min-height: 100vh;
-  }
-
-  body{
     display:flex;
     justify-content:center;
     padding: 40px 20px 60px;
-    background:
-      radial-gradient(600px 300px at 20% 0%, rgba(37,244,238,0.10), transparent 60%),
-      radial-gradient(600px 320px at 85% 15%, rgba(254,44,85,0.10), transparent 60%),
-      var(--bg);
   }
 
   .wrap{
@@ -53,30 +54,31 @@
     align-items:center;
     gap:8px;
     font-family:'Heebo', sans-serif;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 13px;
-    color: var(--ink-dim);
+    color: var(--ink);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: 6px 14px;
+    border-radius: 999px;
   }
 
   .kicker .dot{
-    width:7px; height:7px; border-radius:50%;
+    width:8px; height:8px; border-radius:50%;
     background: linear-gradient(135deg, var(--cyan), var(--pink));
   }
 
   h1{
     font-size: 30px;
     font-weight: 800;
-    line-height: 1.25;
-    margin: 10px 0 8px;
-    background: linear-gradient(90deg, var(--ink) 40%, var(--cyan));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    line-height: 1.3;
+    margin: 16px 0 10px;
+    color: var(--ink);
   }
 
   p.lede{
     color: var(--ink-dim);
-    font-size: 14.5px;
+    font-size: 15px;
     line-height: 1.6;
     max-width: 360px;
     margin: 0 auto;
@@ -93,15 +95,15 @@
     position: relative;
     display:flex;
     align-items:center;
-    background: var(--bg-2);
-    border: 1px solid var(--line);
+    background: var(--panel);
+    border: 1.5px solid var(--line);
     border-radius: 12px;
     transition: border-color .15s ease, box-shadow .15s ease;
   }
 
   .field:focus-within{
     border-color: var(--cyan);
-    box-shadow: 0 0 0 3px rgba(37,244,238,0.12);
+    box-shadow: 0 0 0 3px rgba(37,244,238,0.14);
   }
 
   .field input{
@@ -111,31 +113,30 @@
     outline: none;
     color: var(--ink);
     font-family: 'Heebo', sans-serif;
-    font-size: 14px;
+    font-size: 14.5px;
     padding: 14px 16px;
     direction: ltr;
     text-align: right;
   }
 
   .field input::placeholder{
-    color: #4d5560;
-    font-family: 'Rubik', sans-serif;
+    color: #5b6270;
   }
 
   button.go{
     border: none;
     border-radius: 12px;
-    padding: 13px 18px;
+    padding: 15px 18px;
     font-family: 'Rubik', sans-serif;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 15.5px;
     color: #061013;
     background: linear-gradient(90deg, var(--cyan), #7ef7f3);
     cursor: pointer;
     transition: transform .12s ease, filter .12s ease;
   }
 
-  button.go:hover{ filter: brightness(1.05); }
+  button.go:hover{ filter: brightness(1.08); }
   button.go:active{ transform: scale(0.98); }
 
   button.go:disabled{
@@ -161,10 +162,8 @@
     background: #000;
     border-radius: 20px;
     padding: 8px;
-    border: 1px solid #24272d;
-    box-shadow:
-      0 0 0 1px rgba(255,255,255,0.03) inset,
-      0 30px 60px -20px rgba(0,0,0,0.7);
+    border: 1px solid var(--line);
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
     position: relative;
   }
 
@@ -174,7 +173,7 @@
     max-height: 80vh;
     border-radius: 14px;
     overflow: hidden;
-    background: #0e1013;
+    background: var(--panel);
     position: relative;
     display:flex;
     align-items:center;
@@ -201,6 +200,7 @@
   }
 
   .screen-state .msg{
+    font-family: 'Heebo', sans-serif;
     font-size: 13px;
     line-height: 1.6;
   }
@@ -212,7 +212,7 @@
   .pulse{
     width: 46px; height: 46px;
     border-radius: 50%;
-    border: 3px solid #23272f;
+    border: 3px solid var(--line);
     border-top-color: var(--cyan);
     animation: spin 0.85s linear infinite;
     margin: 0 auto 14px;
@@ -223,20 +223,19 @@
   footer{
     text-align:center;
     margin-top: 26px;
-    font-size: 12px;
+    font-family: 'Heebo', sans-serif;
+    font-size: 12.5px;
     color: #545c68;
     line-height: 1.7;
   }
-
-  footer a{ color: var(--ink-dim); }
 </style>
 </head>
 <body>
 
 <div class="wrap">
   <header>
-    <span class="kicker"><span class="dot"></span>כלי צפייה עצמאי</span>
-    <h1>הדביקו קישור טיקטוק,<br>קבלו סרטון</h1>
+    <span class="kicker"><span class="dot"></span>כלי צפייה חיצוני לטיקטוק</span>
+    <h1>הדביקו קישור טיקטוק,<br>צפו בסרטון</h1>
     <p class="lede">אם קישור טיקטוק לא נפתח לכם בלי האפליקציה — תדביקו אותו כאן והוא יתנגן ישר בדף, בלי הפניה לחנות האפליקציות.</p>
   </header>
 
@@ -300,7 +299,6 @@
   }
 
   function extractIdFromUrl(url){
-    // matches /video/1234567890123456789
     const match = url.match(/\/video\/(\d+)/);
     return match ? match[1] : null;
   }
@@ -338,15 +336,10 @@
     setLoading();
 
     try {
-      // direct ID in the URL itself (fast path, no network needed)
       let id = extractIdFromUrl(url);
-
-      // otherwise ask TikTok's own oEmbed service to resolve it
-      // (also handles shortened vm.tiktok.com / vt.tiktok.com links)
       if (!id){
         id = await resolveViaOEmbed(url);
       }
-
       setVideo(id);
     } catch (err){
       setError('לא הצלחנו לטעון את הסרטון הזה. נסו להדביק את הקישור המלא מהדפדפן (לא מקוצר), או בדקו שהסרטון עדיין קיים.');
